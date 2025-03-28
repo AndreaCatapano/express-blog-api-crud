@@ -10,12 +10,12 @@ function index(req, res) {
         console.log(tagsArray)
         filterdPosts = posts.filter(post => {
 
-            return tagsArray.some(queryTags => {
+            return tagsArray.every(queryTags => {
 
-                const normalizedQueryTag = queryTags.toLowerCase().replace(/\s/g, '-');
+                const normalizedQueryTag = queryTags.toLowerCase().replace(/\s/g, '+');
 
                 return post.tags.some(postTag => {
-                    const normalizedPostTag = postTag.toLowerCase().replace(/ /g, '-');
+                    const normalizedPostTag = postTag.toLowerCase().replace(/\s/g, '+');
                     return normalizedPostTag.includes(normalizedQueryTag);
                 });
             });
