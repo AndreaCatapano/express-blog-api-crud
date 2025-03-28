@@ -3,14 +3,23 @@ const posts = require("../data/posts.js");
 
 function index(req, res) {
     let filterdPosts = posts;
+
     if (req.query.tags) {
-        const normalizedQueryTag = req.query.tags.toLowerCase().replace(" ", '-');
+
+        const tagsArray = req.query.tags;
+        console.log(tagsArray)
         filterdPosts = posts.filter(post => {
-            return post.tags.some(tag => {
-                const normalizedPostTag = tag.toLowerCase().replace(" ", '-');
-                return normalizedPostTag.includes(normalizedQueryTag);            
+
+            return tagsArray.some(queryTags => {
+
+                const normalizedQueryTag = queryTags.toLowerCase().replace(/\s/g, '-');
+
+                return post.tags.some(postTag => {
+                    const normalizedPostTag = postTag.toLowerCase().replace(/ /g, '-');
+                    return normalizedPostTag.includes(normalizedQueryTag);
+                });
+            });
         });
-    });
     }
     res.json(filterdPosts)
 }
