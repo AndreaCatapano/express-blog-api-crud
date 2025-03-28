@@ -3,8 +3,14 @@ const posts = require("../data/posts.js");
 
 function index(req, res) {
     let filterdPosts = posts;
-    if (req.query.tags){
-        filterdPosts = posts.filter(post => post.tags.includes(req.query.tags))
+    if (req.query.tags) {
+        const normalizedQueryTag = req.query.tags.toLowerCase().replace(" ", '-');
+        filterdPosts = posts.filter(post => {
+            return post.tags.some(tag => {
+                const normalizedPostTag = tag.toLowerCase().replace(" ", '-');
+                return normalizedPostTag.includes(normalizedQueryTag);            
+        });
+    });
     }
     res.json(filterdPosts)
 }
