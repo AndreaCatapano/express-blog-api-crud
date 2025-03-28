@@ -6,7 +6,7 @@ function index(req, res) {
 
     if (req.query.tags) {
 
-        const tagsArray = req.query.tags;
+        const tagsArray = Array.isArray(req.query.tags) ? req.query.tags : [req.query.tags];
         console.log(tagsArray)
         filterdPosts = posts.filter(post => {
 
