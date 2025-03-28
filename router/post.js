@@ -1,34 +1,23 @@
 const express = require("express");
+const postController = require("../controller/postController.js")
 const router = express.Router();
 
 // Index
-router.get("/", function (req, res){
-    res.send("Funzione Index")
-})
+router.get("/", postController.index)
 
 // Show
-router.get("/:id", function (req, res){
-    res.send("Funzione Show")
-})
+router.get("/:id", postController.show)
 
 // Store 
-router.post("/", function (req, res){
-    res.send("Funzione Store")
-})
+router.post("/", postController.store)
 
 // Update 
-router.put("/:id", function (req, res){
-    res.send("Funzione Update")
-})
+router.put("/:id", postController.update)
 
 // Patch 
-router.patch("/:id", function (req, res){
-    res.send("Funzione Patch")
-})
+router.patch("/:id", postController.patch)
 
 // Destroy 
-router.delete("/:id", function (req, res){
-    res.send("Funzione Delete")
-})
+router.delete("/:id", postController.destroy)
 
 module.exports = router;
