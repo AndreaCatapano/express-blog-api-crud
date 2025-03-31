@@ -1,13 +1,12 @@
 const posts = require("../data/posts.js");
 
-
 function index(req, res) {
     let filterdPosts = posts;
 
     if (req.query.tags) {
 
         const tagsArray = Array.isArray(req.query.tags) ? req.query.tags : [req.query.tags];
-        console.log(tagsArray)
+        
         filterdPosts = posts.filter(post => {
 
             return tagsArray.every(queryTags => {
@@ -36,11 +35,26 @@ function show(req, res) {
 }
 
 function store(req, res) {
-    res.send("Funzione Store")
+    const newId = posts.length > 0 ? (posts[posts.length - 1].id + 1) : 1;
+    const newPost = {
+        id: newId, 
+        title : req.body.title,
+        content : req.body.content,
+        image : req.body.image,
+        tags : req.body.tags
+    }
+
+    posts.push(newPost);
+
+    console.log(posts)
+
+    res.status(201);
+    res.json(newPost);
 }
 
 function update(req, res) {
     res.send("Funzione Update")
+
 }
 
 function patch(req, res) {
