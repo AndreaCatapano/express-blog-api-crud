@@ -6,7 +6,7 @@ function index(req, res) {
     if (req.query.tags) {
 
         const tagsArray = Array.isArray(req.query.tags) ? req.query.tags : [req.query.tags];
-        
+
         filterdPosts = posts.filter(post => {
 
             return tagsArray.every(queryTags => {
@@ -37,11 +37,11 @@ function show(req, res) {
 function store(req, res) {
     const newId = posts.length > 0 ? (posts[posts.length - 1].id + 1) : 1;
     const newPost = {
-        id: newId, 
-        title : req.body.title,
-        content : req.body.content,
-        image : req.body.image,
-        tags : req.body.tags
+        id: newId,
+        title: req.body.title,
+        content: req.body.content,
+        image: req.body.image,
+        tags: req.body.tags
     };
 
     posts.push(newPost);
@@ -55,13 +55,16 @@ function store(req, res) {
 function update(req, res) {
     const id = parseInt(req.params.id);
     const post = posts.find(post => post.id === id);
-    console.log(post);
     if (post) {
-        post.title = req.body.title;
-        post.content = req.body.content;
-        post.image = req.body.image;
-        post.tags = [req.body.tags]
-        res.status(200).json(post)
+        if (!req.body.title || !req.body.content || !req.body.image || !req.body.tags) {
+            res.status(404).json({ message: "Dati Non validi" });
+        } else {
+            post.title = req.body.title;
+            post.content = req.body.content;
+            post.image = req.body.image;
+            post.tags = Array.isArray(req.body.tags) ? req.body.tags : [req.body.tags];
+            res.status(200).json(post)
+        }
     } else {
         res.status(404).json({ message: "Post non trovato" });
     }
@@ -70,20 +73,19 @@ function update(req, res) {
 function patch(req, res) {
     const id = parseInt(req.params.id);
     const post = posts.find(post => post.id === id);
-    console.log(post);
     if (post) {
-        if (req.body.title != post.title){
+        if (req.body.title && req.body.title != post.title) {
             post.title = req.body.title;
-        } 
-        if (req.body.content != post.content){
+        }
+        if (req.body.content && req.body.content != post.content) {
             post.content = req.body.content;
-        } 
-        if (req.body.image != post.image){
+        }
+        if (req.body.image && req.body.image != post.image) {
             post.image = req.body.image;
-        } 
-        if (req.body.tags != post.tags){
-            post.tags = req.body.tags;
-        } 
+        }
+        if (req.body.tags && JSON.stringify(req.body.tags) !== JSON.stringify(post.tags)) {
+            post.tags = Array.isArray(req.body.tags) ? req.body.tags : [req.body.tags];
+        }
         res.status(200).json(post)
     } else {
         res.status(404).json({ message: "Post non trovato" });
