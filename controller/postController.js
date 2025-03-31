@@ -42,23 +42,52 @@ function store(req, res) {
         content : req.body.content,
         image : req.body.image,
         tags : req.body.tags
-    }
+    };
 
     posts.push(newPost);
 
-    console.log(posts)
+    console.log(posts);
 
     res.status(201);
     res.json(newPost);
 }
 
 function update(req, res) {
-    res.send("Funzione Update")
-
+    const id = parseInt(req.params.id);
+    const post = posts.find(post => post.id === id);
+    console.log(post);
+    if (post) {
+        post.title = req.body.title;
+        post.content = req.body.content;
+        post.image = req.body.image;
+        post.tags = [req.body.tags]
+        res.status(200).json(post)
+    } else {
+        res.status(404).json({ message: "Post non trovato" });
+    }
 }
 
 function patch(req, res) {
-    res.send("Funzione Patch")
+    const id = parseInt(req.params.id);
+    const post = posts.find(post => post.id === id);
+    console.log(post);
+    if (post) {
+        if (req.body.title != post.title){
+            post.title = req.body.title;
+        } 
+        if (req.body.content != post.content){
+            post.content = req.body.content;
+        } 
+        if (req.body.image != post.image){
+            post.image = req.body.image;
+        } 
+        if (req.body.tags != post.tags){
+            post.tags = req.body.tags;
+        } 
+        res.status(200).json(post)
+    } else {
+        res.status(404).json({ message: "Post non trovato" });
+    }
 }
 
 function destroy(req, res) {
